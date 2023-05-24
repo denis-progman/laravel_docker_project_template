@@ -22,6 +22,17 @@ services:
     networks:
       - appnet
 
+  mysql:
+    container_name: mysql-server
+    build:
+      dockerfile: docker/mysql/Dockerfile
+    ports: 
+      - '3306:3306'
+    volumes:
+      - "./storage/mysql_base:/var/lib/mysql"
+    networks:
+      - appnet
+
 networks:
   appnet:
     
