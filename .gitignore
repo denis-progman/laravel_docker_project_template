@@ -2,4 +2,4 @@
 .idea
 .env
 app
-storage
+storage/mysql-db/*
