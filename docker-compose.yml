@@ -29,11 +29,6 @@ services:
     image: mysql:latest
     volumes:
       - "./storage/mysql-db:/var/lib/mysql"
-    # environment: 
-    #   MYSQL_DATABASE: 'laravel'
-    #   MYSQL_USER: 'laravel'
-    #   MYSQL_PASSWORD: 'pass'
-    #   MYSQL_ROOT_PASSWORD: 'pass' 
     networks:
       - appnet
 
