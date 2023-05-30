@@ -23,13 +23,15 @@ services:
       - appnet
 
   mysql:
-    container_name: mysql-server
-    build:
-      dockerfile: docker/mysql/Dockerfile
-    ports: 
-      - '3306:3306'
+    container_name: mysql-db
+    image: mysql:latest
     volumes:
-      - "./storage/mysql_base:/var/lib/mysql"
+      - "./storage/mysql-db:/var/lib/mysql"
+    environment: 
+      MYSQL_DATABASE: 'laravel'
+      MYSQL_USER: 'laravel'
+      MYSQL_PASSWORD: 'pass'
+      MYSQL_ROOT_PASSWORD: 'pass' 
     networks:
       - appnet
 
