@@ -5,9 +5,12 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
+    ports:
+      - 8088:80
     volumes:
       - "./app:/var/www/html"
       - "./config/php/fpm.config:/etc/php81/php-fpm.d/www.conf"
+      - "./config/php/httpd.conf:/etc/apache2/httpd.conf"
     networks:
       - appnet
 

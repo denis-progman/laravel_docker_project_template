@@ -28,6 +28,12 @@ RUN apk update \
     php81-tokenizer \
     php81-gd \
     libmcrypt-dev \
-    curl
+    curl \
+    libxml2-dev \
+    apache2 \
+    apache2-doc \
+    apache2-utils
 
-ENTRYPOINT ["php-fpm81", "-F", "-R"]
+EXPOSE 80
+
+ENTRYPOINT httpd -k start && php-fpm81 -F -R
