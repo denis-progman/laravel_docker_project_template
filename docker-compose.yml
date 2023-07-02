@@ -8,7 +8,7 @@ services:
     ports:
       - 8088:80
     volumes:
-      - "./app:/var/www/html"
+      - "./app/:/var/www/html"
       - "./config/php/fpm.config:/etc/php81/php-fpm.d/www.conf"
       - "./config/php/httpd.conf:/etc/apache2/httpd.conf"
     networks:
@@ -30,6 +30,8 @@ services:
     - ./.env
     container_name: mysql-db
     image: mysql:latest
+    ports: 
+      - '3306:3306'
     volumes:
       - "./storage/mysql-db:/var/lib/mysql"
     networks:
