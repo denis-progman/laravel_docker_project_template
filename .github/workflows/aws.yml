@@ -71,8 +71,8 @@ jobs:
         IMAGE_TAG_2: ${{ github.sha }}
       run: |
         docker build -f docker/nginx/Dockerfile -t $ECR_REGISTRY_2/${{vars.MY_ECR_REPOSITORY}}:nginx-$IMAGE_TAG_2 .
-        docker push $ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY_2}}:nginx-$IMAGE_TAG_2
-        echo "image=$ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY_2}}:nginx-$IMAGE_TAG_2" >> $GITHUB_OUTPUT
+        docker push $ECR_REGISTRY_2/${{vars.MY_ECR_REPOSITORY}}:nginx-$IMAGE_TAG_2
+        echo "image=$ECR_REGISTRY_2/${{vars.MY_ECR_REPOSITORY}}:nginx-$IMAGE_TAG_2" >> $GITHUB_OUTPUT
     
     - name: Build, php-app tag, and push image to Amazon ECR
       id: build-image-app
