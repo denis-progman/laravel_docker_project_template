@@ -34,6 +34,4 @@ RUN apk update \
     apache2-doc \
     apache2-utils
 
-EXPOSE 80
-
 ENTRYPOINT httpd -k start && php-fpm81 -F -R
