@@ -72,7 +72,7 @@ jobs:
       run: |
         docker build -f docker/nginx/Dockerfile -t $ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY}}:$IMAGE_TAG .
         docker push $ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY}}:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY:$IMAGE_TAG}}" >> $GITHUB_OUTPUT
+        echo "image=$ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY}}:$IMAGE_TAG" >> $GITHUB_OUTPUT
     
     - name: Build, php-app tag, and push image to Amazon ECR
       id: build-image-app
