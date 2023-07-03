@@ -57,32 +57,32 @@ jobs:
     - name: Build, mysql, and push image to Amazon ECR
       id: build-image-mysql
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
+        ECR_REGISTRY_1: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG_1: ${{ github.sha }}
       run: |
-        docker build -f docker/mysql/Dockerfile -t $ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY}}:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY}}:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY}}:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        docker build -f docker/mysql/Dockerfile -t $ECR_REGISTRY_1/${{vars.MY_ECR_REPOSITORY}}:mysql-$IMAGE_TAG_1 .
+        docker push $ECR_REGISTRY_1/${{vars.MY_ECR_REPOSITORY}}:mysql-$IMAGE_TAG_1
+        echo "image=$ECR_REGISTRY_1/${{vars.MY_ECR_REPOSITORY}}:mysql-$IMAGE_TAG_1" >> $GITHUB_OUTPUT
     
     - name: Build, nginx, and push image to Amazon ECR
       id: build-image-nginx
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
+        ECR_REGISTRY_2: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG_2: ${{ github.sha }}
       run: |
-        docker build -f docker/nginx/Dockerfile -t $ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY}}:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY}}:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY}}:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        docker build -f docker/nginx/Dockerfile -t $ECR_REGISTRY_2/${{vars.MY_ECR_REPOSITORY}}:nginx-$IMAGE_TAG_2 .
+        docker push $ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY_2}}:nginx-$IMAGE_TAG_2
+        echo "image=$ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY_2}}:nginx-$IMAGE_TAG_2" >> $GITHUB_OUTPUT
     
     - name: Build, php-app tag, and push image to Amazon ECR
       id: build-image-app
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
+        IMAGE_TAG_3: ${{ github.sha }}
       run: |
-        docker build -f docker/php/Dockerfile -t $ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY}}:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY}}:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/${{vars.MY_ECR_REPOSITORY}}:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        docker build -f docker/php/Dockerfile -t $ECR_REGISTRY_3/${{vars.MY_ECR_REPOSITORY}}:app-$IMAGE_TAG_3 .
+        docker push $ECR_REGISTRY_3/${{vars.MY_ECR_REPOSITORY}}:app-$IMAGE_TAG_3
+        echo "image=$ECR_REGISTRY_3/${{vars.MY_ECR_REPOSITORY}}:$app-IMAGE_TAG_3" >> $GITHUB_OUTPUT
         
 
 
