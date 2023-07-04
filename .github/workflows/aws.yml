@@ -33,6 +33,10 @@ on:
 permissions:
   contents: read
 
+env:
+  ECR_REGISTRY_2: ${{ steps.login-ecr.outputs.registry }}
+  IMAGE_TAG_2: ${{ github.sha }}
+
 jobs:
   deploy:
     name: Deploy
@@ -66,9 +70,6 @@ jobs:
     
     - name: Build, nginx, and push image to Amazon ECR
       id: build-image-nginx
-      env:
-        ECR_REGISTRY_2: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG_2: ${{ github.sha }}
       run: |
         docker build -f docker/nginx/Dockerfile -t $ECR_REGISTRY/pm-site-nginx:latest .
         docker push $ECR_REGISTRY/pm-site-nginx:latest
