@@ -34,7 +34,6 @@ permissions:
   contents: read
 
 env:
-  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
   IMAGE_TAG: ${{ github.sha }}
 
 jobs:
@@ -57,6 +56,8 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
 
     - name: Build, mysql, and push image to Amazon ECR
       id: build-image-mysql
