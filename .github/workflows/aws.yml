@@ -34,14 +34,15 @@ permissions:
   contents: read
 
 env:
-  ECR_REGISTRY_2: ${{ steps.login-ecr.outputs.registry }}
-  IMAGE_TAG_2: ${{ github.sha }}
+  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     environment: production
+
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -59,7 +60,6 @@ jobs:
 
     - name: Build, mysql, and push image to Amazon ECR
       id: build-image-mysql
-
       run: |
         docker build -f docker/mysql/Dockerfile -t $ECR_REGISTRY/pm-site-mysql:latest .
         docker push $ECR_REGISTRY/pm-site-mysql:latest
