@@ -38,7 +38,9 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     environment: production
-
+    env:
+      ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      IMAGE_TAG: ${{ github.sha }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -56,13 +58,11 @@ jobs:
 
     - name: Build, mysql, and push image to Amazon ECR
       id: build-image-mysql
-      env:
-        ECR_REGISTRY_1: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG_1: ${{ github.sha }}
+
       run: |
-        docker build -f docker/mysql/Dockerfile -t $ECR_REGISTRY_1/${{vars.MY_ECR_REPOSITORY}}:mysql-$IMAGE_TAG_1 .
-        docker push $ECR_REGISTRY_1/${{vars.MY_ECR_REPOSITORY}}:mysql-$IMAGE_TAG_1
-        echo "image=$ECR_REGISTRY_1/${{vars.MY_ECR_REPOSITORY}}:mysql-$IMAGE_TAG_1" >> $GITHUB_OUTPUT
+        docker build -f docker/mysql/Dockerfile -t $ECR_REGISTRY/pm-site-mysql:latest .
+        docker push $ECR_REGISTRY/pm-site-mysql:latest
+        echo "image=$ECR_REGISTRY/pm-site-mysql:latest" >> $GITHUB_OUTPUT
     
     - name: Build, nginx, and push image to Amazon ECR
       id: build-image-nginx
@@ -70,9 +70,9 @@ jobs:
         ECR_REGISTRY_2: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG_2: ${{ github.sha }}
       run: |
-        docker build -f docker/nginx/Dockerfile -t $ECR_REGISTRY_2/${{vars.MY_ECR_REPOSITORY}}:nginx-$IMAGE_TAG_2 .
-        docker push $ECR_REGISTRY_2/${{vars.MY_ECR_REPOSITORY}}:nginx-$IMAGE_TAG_2
-        echo "image=$ECR_REGISTRY_2/${{vars.MY_ECR_REPOSITORY}}:nginx-$IMAGE_TAG_2" >> $GITHUB_OUTPUT
+        docker build -f docker/nginx/Dockerfile -t $ECR_REGISTRY/pm-site-nginx:latest .
+        docker push $ECR_REGISTRY/pm-site-nginx:latest
+        echo "image=$ECR_REGISTRY/pm-site-nginx:latest" >> $GITHUB_OUTPUT
     
     - name: Build, php-app tag, and push image to Amazon ECR
       id: build-image-app
@@ -80,9 +80,9 @@ jobs:
         ECR_REGISTRY_3: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG_3: ${{ github.sha }}
       run: |
-        docker build -f docker/php/Dockerfile -t $ECR_REGISTRY_3/${{vars.MY_ECR_REPOSITORY}}:app-$IMAGE_TAG_3 .
-        docker push $ECR_REGISTRY_3/${{vars.MY_ECR_REPOSITORY}}:app-$IMAGE_TAG_3
-        echo "image=$ECR_REGISTRY_3/${{vars.MY_ECR_REPOSITORY}}:$app-IMAGE_TAG_3" >> $GITHUB_OUTPUT
+        docker build -f docker/php/Dockerfile -t $ECR_REGISTRY/pm-site-php-app:latest .
+        docker push $ECR_REGISTRY/pm-site-php-app:latest
+        echo "image=$ECR_REGISTRY/pm-site-php-app:latest" >> $GITHUB_OUTPUT
         
 
 

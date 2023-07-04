@@ -2,35 +2,81 @@
   "AWSEBDockerrunVersion": 2,
   "volumes": [
     {
-      "name": "php-app",
+      "name": "mysql_storage",
       "host": {
-        "sourcePath": "/var/app/current/php-app"
+        "sourcePath": "/var/mysql_storage"
       }
     },
     {
-      "name": "nginx-proxy-conf",
+      "name": "app_files",
       "host": {
-        "sourcePath": "/var/app/current/proxy/conf.d"
+        "sourcePath": "/var/app/current/app"
       }
-    }  
+    },
+    {
+      "name": "fpm_config",
+      "host": {
+        "sourcePath": "/var/app/current/config/php/fpm.config"
+      }
+    },
+    {
+      "name": "httpd_config",
+      "host": {
+        "sourcePath": "/var/app/current/config/php/httpd.conf"
+      }
+    },
+    {
+      "name": "nginx_config",
+      "host": {
+        "sourcePath": "/var/app/current/config/nginx/nginx.conf"
+      }
+    } 
   ],
   "containerDefinitions": [
     {
-      "name": "php-app",
-      "image": "php:fpm",
+      "name": "mysql",
+      "image": "948107632124.dkr.ecr.us-east-1.amazonaws.com/pm_site:mysql-3f6cfa337d45401092929d578a4ffb5a59a197ba",
       "essential": true,
       "memory": 128,
+      "links": [
+        "app"
+      ],
       "mountPoints": [
         {
-          "sourceVolume": "php-app",
-          "containerPath": "/var/www/html",
+          "sourceVolume": "mysql_storage",
+          "containerPath": "/var/lib/mysql"
+        }
+      ]
+    },
+    {
+      "name": "app",
+      "image": "948107632124.dkr.ecr.us-east-1.amazonaws.com/pm_site:app-3f6cfa337d45401092929d578a4ffb5a59a197ba",
+      "essential": true,
+      "memory": 128,
+      "links": [
+        "mysql",
+        "nginx"
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "app_files",
+          "containerPath": "/var/www/html"
+        },
+        {
+          "sourceVolume": "fpm_config",
+          "containerPath": "/etc/php81/php-fpm.d/www.conf",
+          "readOnly": true
+        },
+        {
+          "sourceVolume": "httpd_config",
+          "containerPath": "/etc/apache2/httpd.conf",
           "readOnly": true
         }
       ]
     },
     {
-      "name": "nginx-proxy",
-      "image": "nginx",
+      "name": "nginx",
+      "image": "948107632124.dkr.ecr.us-east-1.amazonaws.com/pm_site:nginx-3f6cfa337d45401092929d578a4ffb5a59a197ba",
       "essential": true,
       "memory": 128,
       "portMappings": [
@@ -40,21 +86,12 @@
         }
       ],
       "links": [
-        "php-app"
+        "app"
       ],
       "mountPoints": [
         {
-          "sourceVolume": "php-app",
-          "containerPath": "/var/www/html",
-          "readOnly": true
-        },
-        {
-          "sourceVolume": "awseb-logs-nginx-proxy",
-          "containerPath": "/var/log/nginx"
-        },
-        {
-          "sourceVolume": "nginx-proxy-conf",
-          "containerPath": "/etc/nginx/conf.d",
+          "sourceVolume": "nginx_config",
+          "containerPath": "/etc/nginx/nginx.conf",
           "readOnly": true
         }
       ]
